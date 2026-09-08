@@ -8,7 +8,7 @@ import java.util.Locale;
 public class JelinskiMoranda {
 
     public static void main(String[] args) {
-        // ========== ВХОДНЫЕ ДАННЫЕ (Вариант 1) ==========
+        // ЗАДАЕМ ВХОДНЫЕ ДАННЫЕ
         double[] X = {
                 9, 12, 11, 4, 7, 2, 5, 8, 5, 7,
                 1, 6, 1, 9, 4, 1, 3, 3, 6, 1,
@@ -16,7 +16,7 @@ public class JelinskiMoranda {
         };
         int n = X.length;
 
-        // ========== ВСПОМОГАТЕЛЬНЫЕ СУММЫ ==========
+        // НАХОДИМ СУММУ ИНТЕРВАЛОВ И ВЗВЕШЕННУЮ СУММУ ИНТЕРВАЛОВ
         double sumX = 0.0;
         double sumIX = 0.0;
         for (int i = 0; i < n; i++) {
@@ -28,25 +28,24 @@ public class JelinskiMoranda {
         System.out.printf(Locale.US, "ΣX  = %.0f%n", sumX);
         System.out.printf(Locale.US, "ΣiX = %.0f%n%n", sumIX);
 
-        // ========== РЕШЕНИЕ НЕЛИНЕЙНОГО УРАВНЕНИЯ ДЛЯ B ==========
-        // Ищем B > n методом бисекции
+        // РЕШАЕМ НЕЛИНЕЙНОЕ УРАВНЕНИЕ ДЛЯ B, ИЩЕМ B > n МЕТОДОМ БИСЕКЦИИ
         double B = findB(n, sumX, sumIX);
         System.out.printf(Locale.US, "Оценка B (вещественная) = %.6f%n", B);
 
-        // Для отчёта берём ближайшее целое
+        // БЕРЕМ БЛИЖАЙШЕЕ ЦЕЛОЕ ЗНАЧЕНИЕ ОБЩЕГО ЧИСЛА ОШИБОК B
         int Bint = (int) Math.round(B);
         System.out.println("Принятое целое B = " + Bint);
 
-        // ========== РАСЧЁТ K ==========
+        // РАССЧИТЫВАЕМ ЗНАЧЕНИЕ КОЭФФИЦИЕНТА ПРОПОРЦИОНАЛЬНОСТИ K
         double denom = (Bint + 1) * sumX - sumIX;
         double K = n / denom;
         System.out.printf(Locale.US, "K = %.9f%n", K);
 
-        // ========== X_{n+1} ==========
+        //НАХОДИМ СРЕДНЕЕ ВРЕМЯ X_{n+1} ДО ПОЯВЛЕНИЯ n+1 ОШИБКИ
         double Xn1 = 1.0 / (K * (Bint - n));
         System.out.printf(Locale.US, "X_{n+1} = %.3f ч%n", Xn1);
 
-        // ========== t_k ==========
+        // НАХОДИМ ВРЕМЯ ДО ОКОНЧАНИЯ ТЕСТИРОВАНИЯ t_k
         double H = 0.0;
         int m = Bint - n;
         for (int i = 1; i <= m; i++) {
@@ -55,7 +54,7 @@ public class JelinskiMoranda {
         double tk = H / K;
         System.out.printf(Locale.US, "t_k = %.3f ч%n", tk);
 
-        // ========== ВЫВОД ДЛЯ ОТЧЁТА ==========
+        // ВЫВОД РЕЗУЛЬТАТОВ
         System.out.println("\n========== РЕЗУЛЬТАТЫ ==========");
         System.out.println("Общее число ошибок B          = " + Bint);
         System.out.printf(Locale.US, "Коэффициент K                 = %.6f%n", K);
@@ -63,10 +62,7 @@ public class JelinskiMoranda {
         System.out.printf(Locale.US, "Время до окончания тестирования = %.3f ч%n", tk);
     }
 
-    /**
-     * Решает уравнение для B методом бисекции.
-     * f(B) = Σ 1/(B-i+1) - n*ΣX / [(B+1)ΣX - ΣiX]
-     */
+    // МЕТОД findB ДЛЯ РЕШЕНИЯ УРАВНЕНИЯ ДЛЯ B
     private static double findB(int n, double sumX, double sumIX) {
         double left = n + 0.1;          // B > n
         double right = n + 100.0;       // достаточно большой верхний предел
@@ -87,7 +83,7 @@ public class JelinskiMoranda {
         }
         return (left + right) / 2.0;
     }
-
+    // МЕТОД f ДЛЯ ВЫЧИСЛЕНИЯ ЗНАЧЕНИЯ УРАВНЕНИЯ f(B)=0 ПРИ ПОИСКЕ B
     private static double f(double B, int n, double sumX, double sumIX) {
         double leftSum = 0.0;
         for (int i = 1; i <= n; i++) {
