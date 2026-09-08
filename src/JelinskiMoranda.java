@@ -25,8 +25,8 @@ public class JelinskiMoranda {
         }
 
         System.out.println("n = " + n);
-        System.out.printf(Locale.US, "ΣX  = %.0f%n", sumX);
-        System.out.printf(Locale.US, "ΣiX = %.0f%n%n", sumIX);
+        System.out.printf(Locale.US, "Сумма интервалов ΣX  = %.0f%n", sumX);
+        System.out.printf(Locale.US, "Взвешенная сумма интервалов ΣiX = %.0f%n%n", sumIX);
 
         // РЕШАЕМ НЕЛИНЕЙНОЕ УРАВНЕНИЕ ДЛЯ B, ИЩЕМ B > n МЕТОДОМ БИСЕКЦИИ
         double B = findB(n, sumX, sumIX);
@@ -34,16 +34,13 @@ public class JelinskiMoranda {
 
         // БЕРЕМ БЛИЖАЙШЕЕ ЦЕЛОЕ ЗНАЧЕНИЕ ОБЩЕГО ЧИСЛА ОШИБОК B
         int Bint = (int) Math.round(B);
-        System.out.println("Принятое целое B = " + Bint);
 
         // РАССЧИТЫВАЕМ ЗНАЧЕНИЕ КОЭФФИЦИЕНТА ПРОПОРЦИОНАЛЬНОСТИ K
         double denom = (Bint + 1) * sumX - sumIX;
         double K = n / denom;
-        System.out.printf(Locale.US, "K = %.9f%n", K);
 
         //НАХОДИМ СРЕДНЕЕ ВРЕМЯ X_{n+1} ДО ПОЯВЛЕНИЯ n+1 ОШИБКИ
         double Xn1 = 1.0 / (K * (Bint - n));
-        System.out.printf(Locale.US, "X_{n+1} = %.3f ч%n", Xn1);
 
         // НАХОДИМ ВРЕМЯ ДО ОКОНЧАНИЯ ТЕСТИРОВАНИЯ t_k
         double H = 0.0;
@@ -52,7 +49,6 @@ public class JelinskiMoranda {
             H += 1.0 / i;
         }
         double tk = H / K;
-        System.out.printf(Locale.US, "t_k = %.3f ч%n", tk);
 
         // ВЫВОД РЕЗУЛЬТАТОВ
         System.out.println("\n========== РЕЗУЛЬТАТЫ ==========");
