@@ -30,7 +30,7 @@ public class JelinskiMoranda {
 
         // РЕШАЕМ НЕЛИНЕЙНОЕ УРАВНЕНИЕ ДЛЯ B, ИЩЕМ B > n МЕТОДОМ БИСЕКЦИИ
         double B = findB(n, sumX, sumIX);
-        System.out.printf(Locale.US, "Оценка B (вещественная) = %.6f%n", B);
+        System.out.printf(Locale.US, "Общее число ошибок B (вещественное) = %.6f%n", B);
 
         // БЕРЕМ БЛИЖАЙШЕЕ ЦЕЛОЕ ЗНАЧЕНИЕ ОБЩЕГО ЧИСЛА ОШИБОК B
         int Bint = (int) Math.round(B);
@@ -51,10 +51,9 @@ public class JelinskiMoranda {
         double tk = H / K;
 
         // ВЫВОД РЕЗУЛЬТАТОВ
-        System.out.println("\n========== РЕЗУЛЬТАТЫ ==========");
-        System.out.println("Общее число ошибок B          = " + Bint);
-        System.out.printf(Locale.US, "Коэффициент K                 = %.6f%n", K);
-        System.out.printf(Locale.US, "Время до следующей ошибки     = %.3f ч%n", Xn1);
+        System.out.println("Общее число ошибок B (целое) = " + Bint);
+        System.out.printf(Locale.US, "Коэффициент K = %.6f%n", K);
+        System.out.printf(Locale.US, "Время до следующей ошибки = %.3f ч%n", Xn1);
         System.out.printf(Locale.US, "Время до окончания тестирования = %.3f ч%n", tk);
     }
 
