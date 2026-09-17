@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Oracle OpenJDK 26
         uses: oracle-actions/setup-java@v1
@@ -28,7 +28,6 @@ jobs:
       - name: Compile Java sources
         run: |
           mkdir -p out
-          # Компилируем всё из папки src
           find src -name "*.java" | xargs javac -d out -source 23 -target 23
 
       - name: Check compilation result
