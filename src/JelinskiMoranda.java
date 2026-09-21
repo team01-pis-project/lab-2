@@ -1,19 +1,27 @@
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
- * Лабораторная работа №2.
- * Модель Джелинского-Моранды (вариант 1).
- */
+  Лабораторная работа №2. Модель Джелинского-Моранды
+ **/
 public class JelinskiMoranda {
 
     public static void main(String[] args) {
-        // ЗАДАЕМ ВХОДНЫЕ ДАННЫЕ
-        double[] X = {
-                9, 12, 11, 4, 7, 2, 5, 8, 5, 7,
-                1, 6, 1, 9, 4, 1, 3, 3, 6, 1,
-                11, 33, 7, 91, 2, 1
-        };
+        Locale.setDefault(Locale.US);
+
+        // Имя файла: из аргумента командной строки или data.txt по умолчанию
+        String fileName = (args.length > 0) ? args[0] : "data.txt";
+
+        // Чтение интервалов из файла
+        double[] X = readIntervalsFromFile(fileName);
+        if (X == null || X.length == 0) {
+            System.err.println("Не удалось прочитать данные из файла: " + fileName);
+            return;
+        }
         int n = X.length;
 
         // НАХОДИМ СУММУ ИНТЕРВАЛОВ И ВЗВЕШЕННУЮ СУММУ ИНТЕРВАЛОВ
@@ -24,6 +32,7 @@ public class JelinskiMoranda {
             sumIX += (i + 1) * X[i];
         }
 
+        System.out.println("Файл данных: " + fileName);
         System.out.println("n = " + n);
         System.out.printf(Locale.US, "Сумма интервалов ΣX  = %.0f%n", sumX);
         System.out.printf(Locale.US, "Взвешенная сумма интервалов ΣiX = %.0f%n%n", sumIX);
@@ -55,6 +64,40 @@ public class JelinskiMoranda {
         System.out.printf(Locale.US, "Коэффициент K = %.6f%n", K);
         System.out.printf(Locale.US, "Время до следующей ошибки = %.3f ч%n", Xn1);
         System.out.printf(Locale.US, "Время до окончания тестирования = %.3f ч%n", tk);
+    }
+
+
+     // МЕТОД ДЛЯ ЧТЕНИЯ ИНТЕРВАЛОВ ИЗ ТЕКСТОВОГО ФАЙЛА
+    private static double[] readIntervalsFromFile(String fileName) {
+        List<Double> list = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+
+                String[] parts = line.split("[,\\s]+");
+                for (String p : parts) {
+                    if (!p.isEmpty()) {
+                        list.add(Double.parseDouble(p.replace(',', '.')));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка чтения файла: " + e.getMessage());
+            return null;
+        } catch (NumberFormatException e) {
+            System.err.println("Ошибка формата числа в файле: " + e.getMessage());
+            return null;
+        }
+
+        double[] X = new double[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            X[i] = list.get(i);
+        }
+        return X;
     }
 
     // МЕТОД findB ДЛЯ РЕШЕНИЯ УРАВНЕНИЯ ДЛЯ B
